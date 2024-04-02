@@ -15,19 +15,19 @@ import java.util.stream.Collectors;
 @Service
 public class PessoaService {
     private List<Endereco> enderecos = List.of(
-            new Endereco("Attilio bilibio", 200),
-            new Endereco("Antonio de Carvalho", 1000)
+            new Endereco(1L,"Attilio bilibio", 200),
+            new Endereco(2L,"Antonio de Carvalho", 1000)
     );
 
     private List<Pessoa> pessoas = new ArrayList<>(
             List.of(
-                    new Pessoa(1, "Maria", "00001",
+                    new Pessoa(1L, "Maria", "00001",
                             LocalDate.now().minus(20, ChronoUnit.YEARS),
                             enderecos),
-                    new Pessoa(2, "Joao", "00002",
+                    new Pessoa(2L, "Joao", "00002",
                             LocalDate.now().minus(34, ChronoUnit.YEARS),
                             enderecos),
-                    new Pessoa(3, "Lucia", "00003",
+                    new Pessoa(3L, "Lucia", "00003",
                             LocalDate.now().minus(77, ChronoUnit.YEARS),
                             enderecos)
             )
@@ -59,7 +59,7 @@ public class PessoaService {
     }
 
     public Pessoa criarPessoa(Pessoa pessoa) {
-        pessoa.setId(pessoas.size() + 1);
+        pessoa.setId(pessoas.size() + 1L);
         pessoas.add(pessoa);
         return pessoa;
     }
@@ -78,7 +78,7 @@ public class PessoaService {
     public Optional<Pessoa> editarPessoa(Integer id, Pessoa pessoa) {
         int posicao = localizarPessoa(id);
         if (posicao != -1) {
-            pessoa.setId(id);
+            pessoa.setId(Long.valueOf(id));
             pessoas.set(posicao, pessoa);
             return Optional.of(pessoa);
         } else {
@@ -89,7 +89,7 @@ public class PessoaService {
     public Optional<Pessoa> editarParcial(Integer id, Pessoa pessoa) {
         int posicao = localizarPessoa(id);
         if (posicao != -1) {
-            pessoa.setId(id);
+            pessoa.setId(Long.valueOf(id));
             // fixme atualização tem que ser parcial.
             pessoas.set(posicao, pessoa);
             return Optional.of(pessoa);
