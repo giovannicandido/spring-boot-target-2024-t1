@@ -4,6 +4,6 @@ import lombok.Value;
 
 @Value
 public class RegistryNotFoundException extends RuntimeException {
-    private final int id;
+    private final Long id;
 
 }

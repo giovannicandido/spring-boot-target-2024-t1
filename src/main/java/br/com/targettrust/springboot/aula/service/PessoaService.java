@@ -1,9 +1,14 @@
 package br.com.targettrust.springboot.aula.service;
 
 import br.com.targettrust.springboot.aula.model.Endereco;
+import br.com.targettrust.springboot.aula.model.Exercicio;
 import br.com.targettrust.springboot.aula.model.Pessoa;
 import br.com.targettrust.springboot.aula.model.exceptions.RegistryNotFoundException;
+import br.com.targettrust.springboot.aula.repository.ExercicioRepository;
+import br.com.targettrust.springboot.aula.repository.PessoaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -13,31 +18,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PessoaService {
-    private List<Endereco> enderecos = List.of(
-            new Endereco(1L,"Attilio bilibio", 200),
-            new Endereco(2L,"Antonio de Carvalho", 1000)
-    );
+    private final PessoaRepository pessoaRepository;
+    private final ExercicioRepository exercicioRepository;
 
-    private List<Pessoa> pessoas = new ArrayList<>(
-            List.of(
-                    new Pessoa(1L, "Maria", "00001",
-                            LocalDate.now().minus(20, ChronoUnit.YEARS),
-                            enderecos),
-                    new Pessoa(2L, "Joao", "00002",
-                            LocalDate.now().minus(34, ChronoUnit.YEARS),
-                            enderecos),
-                    new Pessoa(3L, "Lucia", "00003",
-                            LocalDate.now().minus(77, ChronoUnit.YEARS),
-                            enderecos)
-            )
-    );
-
+    private List<Pessoa> pessoas = new ArrayList<>();
     public List<Pessoa> listarPessoas(String nome) {
-
-        return pessoas.stream()
-                .filter(pessoa -> pessoa.getNome().contains(nome))
-                .collect(Collectors.toList());
+        return pessoaRepository.findAll();
+//        return pessoas.stream()
+//                .filter(pessoa -> (nome != null && !nome.trim().equals("")) ? pessoa.getNome().contains(nome) : true )
+//                .collect(Collectors.toList());
 
     }
 
@@ -58,10 +49,34 @@ public class PessoaService {
         return pessoas.indexOf(pessoa);
     }
 
+    // 1. Organization
+    //   2. Policies
+    //   3. Policy Options
+    //      4. Calculation Methods
+    //        5. Inputs
+    //        5. Results
+
+
+//    @Transactional
     public Pessoa criarPessoa(Pessoa pessoa) {
-        pessoa.setId(pessoas.size() + 1L);
-        pessoas.add(pessoa);
-        return pessoa;
+
+        List<Exercicio> exercicios = new ArrayList<>();
+
+        pessoa.getExercicios().forEach(exercicio -> {
+
+            // busquei do banco
+            Optional<Exercicio> exercicioNoBanco = exercicio.getId() == null ? Optional.empty() : exercicioRepository.findById(exercicio.getId());
+//            exercicioRepository.
+            if(exercicioNoBanco.isPresent()) {
+                exercicios.add(exercicioNoBanco.get());
+            } else {
+                Exercicio exercicioNoBanco2 = exercicioRepository.save(exercicio);
+                // usuario enviou
+                exercicios.add(exercicioNoBanco2);
+            }
+        });
+        pessoa.setExercicios(exercicios);
+        return pessoaRepository.create(pessoa);
     }
 
     public Optional<Pessoa> findById(Integer id) {
@@ -103,7 +118,7 @@ public class PessoaService {
         if (posicao != -1) {
             pessoas.remove(posicao);
         } else {
-            throw new RegistryNotFoundException(id);
+            throw new RegistryNotFoundException(Long.valueOf(id));
         }
     }
 }

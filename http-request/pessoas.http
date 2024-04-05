@@ -1,0 +1,25 @@
+###
+POST {{url}}/pessoas
+Content-Type: application/json
+
+{
+  "nome": "Teste",
+  "cpf": "000006",
+  "dataNascimento": "2024-04-05",
+  "enderecos": [
+    {
+      "rua": "Antonio de Carvalho",
+      "numero": 100
+    }
+  ],
+  "exercicios": [
+    {
+      "nome": "antebraco",
+      "parteCorpo": "braco"
+    }
+  ]
+}
+
+###
+GET {{url}}/pessoas
+Accept: application/json
