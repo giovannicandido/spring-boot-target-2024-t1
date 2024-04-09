@@ -5,26 +5,52 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
-    <changeSet id="1712617510453-1" author="giova (generated)">
-        <createSequence incrementBy="1" sequenceName="endereco_seq" startValue="1"/>
-    </changeSet>
-    <changeSet id="1712617510453-2" author="giova (generated)">
-        <createSequence incrementBy="1" sequenceName="exercicio_seq" startValue="1"/>
-    </changeSet>
-    <changeSet id="1712617510453-3" author="giova (generated)">
+    <changeSet id="1712624054062-1" author="giova (generated)">
         <createSequence incrementBy="1" sequenceName="cliente_seq" startValue="1"/>
     </changeSet>
-    <changeSet id="1712617510453-4" author="giova (generated)">
+    <changeSet id="1712624054062-2" author="giova (generated)">
+        <createSequence incrementBy="1" sequenceName="endereco_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1712624054062-3" author="giova (generated)">
+        <createSequence incrementBy="1" sequenceName="exercicio_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1712624054062-4" author="giova (generated)">
+        <createTable tableName="cliente">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_cliente"/>
+            </column>
+            <column name="nome" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cpf" type="VARCHAR(14)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_nascimento" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1712624054062-5" author="giova (generated)">
+        <createTable tableName="cliente_exercicios">
+            <column name="cliente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="exercicios_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1712624054062-6" author="giova (generated)">
         <createTable tableName="endereco">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_endereco"/>
             </column>
             <column name="rua" type="VARCHAR(255)"/>
             <column name="numero" type="INT"/>
-            <column name="pessoa_id" type="BIGINT"/>
+            <column name="cliente_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet id="1712617510453-5" author="giova (generated)">
+    <changeSet id="1712624054062-7" author="giova (generated)">
         <createTable tableName="exercicio">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_exercicio"/>
@@ -37,50 +63,26 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="1712617510453-6" author="giova (generated)">
-        <createTable tableName="cliente">
-            <column name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_pessoa"/>
-            </column>
-            <column name="nome" type="VARCHAR(50)"/>
-            <column name="cpf" type="VARCHAR(14)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="data_nascimento" type="DATE">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+    <changeSet id="1712624054062-8" author="giova (generated)">
+        <addUniqueConstraint columnNames="cpf" constraintName="uc_cliente_cpf" tableName="cliente"/>
     </changeSet>
-    <changeSet id="1712617510453-7" author="giova (generated)">
-        <createTable tableName="pessoa_exercicios">
-            <column name="pessoa_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="exercicios_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet id="1712617510453-8" author="giova (generated)">
+    <changeSet id="1712624054062-9" author="giova (generated)">
         <addUniqueConstraint columnNames="nome" constraintName="uc_exercicio_nome" tableName="exercicio"/>
     </changeSet>
-    <changeSet id="1712617510453-9" author="giova (generated)">
-        <addUniqueConstraint columnNames="cpf" constraintName="uc_pessoa_cpf" tableName="cliente"/>
-    </changeSet>
-    <changeSet id="1712617510453-10" author="giova (generated)">
-        <addForeignKeyConstraint baseColumnNames="pessoa_id" baseTableName="endereco"
-                                 constraintName="FK_ENDERECO_ON_PESSOA" referencedColumnNames="id"
+    <changeSet id="1712624054062-10" author="giova (generated)">
+        <addForeignKeyConstraint baseColumnNames="cliente_id" baseTableName="endereco"
+                                 constraintName="FK_ENDERECO_ON_CLIENTE" referencedColumnNames="id"
                                  referencedTableName="cliente"/>
     </changeSet>
-    <changeSet id="1712617510453-11" author="giova (generated)">
-        <addForeignKeyConstraint baseColumnNames="exercicios_id" baseTableName="pessoa_exercicios"
-                                 constraintName="fk_pesexe_on_exercicio" referencedColumnNames="id"
+    <changeSet id="1712624054062-11" author="giova (generated)">
+        <addForeignKeyConstraint baseColumnNames="cliente_id" baseTableName="cliente_exercicios"
+                                 constraintName="fk_cliexe_on_cliente" referencedColumnNames="id"
+                                 referencedTableName="cliente"/>
+    </changeSet>
+    <changeSet id="1712624054062-12" author="giova (generated)">
+        <addForeignKeyConstraint baseColumnNames="exercicios_id" baseTableName="cliente_exercicios"
+                                 constraintName="fk_cliexe_on_exercicio" referencedColumnNames="id"
                                  referencedTableName="exercicio"/>
-    </changeSet>
-    <changeSet id="1712617510453-12" author="giova (generated)">
-        <addForeignKeyConstraint baseColumnNames="pessoa_id" baseTableName="pessoa_exercicios"
-                                 constraintName="fk_pesexe_on_pessoa" referencedColumnNames="id"
-                                 referencedTableName="cliente"/>
     </changeSet>
 
 </databaseChangeLog>

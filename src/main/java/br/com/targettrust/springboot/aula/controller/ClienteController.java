@@ -1,7 +1,8 @@
 package br.com.targettrust.springboot.aula.controller;
 
-import br.com.targettrust.springboot.aula.dto.AssociarExercicioRequest;
-import br.com.targettrust.springboot.aula.model.Cliente;
+import br.com.targettrust.springboot.aula.dto.request.AssociarExercicioRequest;
+import br.com.targettrust.springboot.aula.dto.request.ClienteRequest;
+import br.com.targettrust.springboot.aula.dto.response.ClienteResponse;
 import br.com.targettrust.springboot.aula.model.Exercicio;
 import br.com.targettrust.springboot.aula.service.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,8 +48,8 @@ public class ClienteController {
             )
         }
     )
-    public Cliente createCliente(@RequestBody Cliente cliente) {
-        return clienteService.createCliente(cliente);
+    public ClienteResponse createCliente(@RequestBody @Valid ClienteRequest cliente) {
+        return ClienteResponse.fromModel(clienteService.createCliente(cliente.toModel()));
     }
 
     /**
@@ -58,33 +59,39 @@ public class ClienteController {
      * @return
      */
     @GetMapping
-    public List<Cliente> listClientes(
+    public List<ClienteResponse> listClientes(
             @RequestParam( name = "nome", required = false) String nome,
             @RequestParam(name = "idade", required = false) Integer idade
     ) {
 
-        return clienteService.listClientes(nome);
+        return clienteService.listClientes(nome)
+                .stream()
+                .map(ClienteResponse::fromModel)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> findById(@PathVariable(name = "id") Integer id) {
+    public ResponseEntity<ClienteResponse> findById(@PathVariable(name = "id") Integer id) {
         return clienteService.findById(id)
+                .map(ClienteResponse::fromModel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<Cliente> editCliente(@PathVariable(name = "id") Integer id, @RequestBody Cliente cliente) {
+    public ResponseEntity<ClienteResponse> editCliente(@PathVariable(name = "id") Integer id, @RequestBody @Valid ClienteRequest cliente) {
 
-        return clienteService.editCliente(id, cliente)
+        return clienteService.editCliente(id, cliente.toModel())
+                .map(ClienteResponse::fromModel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Cliente> editClienteParcial(@PathVariable(name = "id") Integer id, @RequestBody Cliente cliente) {
+    public ResponseEntity<ClienteResponse> editClienteParcial(@PathVariable(name = "id") Integer id, @RequestBody @Valid ClienteRequest cliente) {
 
-        return clienteService.editarParcial(id, cliente)
+        return clienteService.editarParcial(id, cliente.toModel())
+                .map(ClienteResponse::fromModel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

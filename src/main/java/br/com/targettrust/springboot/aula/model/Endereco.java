@@ -18,4 +18,8 @@ public class Endereco {
     private Long id;
     private String rua;
     private Integer numero;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", foreignKey = @ForeignKey(name = "fk_endereco_id"))
+    private Cliente cliente;
 }

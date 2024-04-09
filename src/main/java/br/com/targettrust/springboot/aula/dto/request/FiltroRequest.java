@@ -1,4 +1,4 @@
-package br.com.targettrust.springboot.aula.dto;
+package br.com.targettrust.springboot.aula.dto.request;
 
 import lombok.Value;
 
