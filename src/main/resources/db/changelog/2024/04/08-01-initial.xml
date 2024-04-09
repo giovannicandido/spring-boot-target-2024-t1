@@ -12,7 +12,7 @@
         <createSequence incrementBy="1" sequenceName="exercicio_seq" startValue="1"/>
     </changeSet>
     <changeSet id="1712617510453-3" author="giova (generated)">
-        <createSequence incrementBy="1" sequenceName="pessoa_seq" startValue="1"/>
+        <createSequence incrementBy="1" sequenceName="cliente_seq" startValue="1"/>
     </changeSet>
     <changeSet id="1712617510453-4" author="giova (generated)">
         <createTable tableName="endereco">
@@ -38,7 +38,7 @@
         </createTable>
     </changeSet>
     <changeSet id="1712617510453-6" author="giova (generated)">
-        <createTable tableName="pessoa">
+        <createTable tableName="cliente">
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_pessoa"/>
             </column>
@@ -65,12 +65,12 @@
         <addUniqueConstraint columnNames="nome" constraintName="uc_exercicio_nome" tableName="exercicio"/>
     </changeSet>
     <changeSet id="1712617510453-9" author="giova (generated)">
-        <addUniqueConstraint columnNames="cpf" constraintName="uc_pessoa_cpf" tableName="pessoa"/>
+        <addUniqueConstraint columnNames="cpf" constraintName="uc_pessoa_cpf" tableName="cliente"/>
     </changeSet>
     <changeSet id="1712617510453-10" author="giova (generated)">
         <addForeignKeyConstraint baseColumnNames="pessoa_id" baseTableName="endereco"
                                  constraintName="FK_ENDERECO_ON_PESSOA" referencedColumnNames="id"
-                                 referencedTableName="pessoa"/>
+                                 referencedTableName="cliente"/>
     </changeSet>
     <changeSet id="1712617510453-11" author="giova (generated)">
         <addForeignKeyConstraint baseColumnNames="exercicios_id" baseTableName="pessoa_exercicios"
@@ -80,7 +80,7 @@
     <changeSet id="1712617510453-12" author="giova (generated)">
         <addForeignKeyConstraint baseColumnNames="pessoa_id" baseTableName="pessoa_exercicios"
                                  constraintName="fk_pesexe_on_pessoa" referencedColumnNames="id"
-                                 referencedTableName="pessoa"/>
+                                 referencedTableName="cliente"/>
     </changeSet>
 
 </databaseChangeLog>

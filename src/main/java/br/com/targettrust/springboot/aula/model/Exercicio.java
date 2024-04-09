@@ -17,14 +17,9 @@ public class Exercicio {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercicio_seq")
     private Long id;
-//    private UUID id;
-    // UUID - V4 (Random), V1 (Ordenavel, MacAddress), V2 (Não sei o que faz), V3 (Não me lembro), V7 (Timestampted, Ordenavel)
-//    private String id;
     @Column(length = 100, unique = true, nullable = false)
     private String nome;
     @Column(nullable = false, length = 150)
     private String parteCorpo;
 
-//    @ManyToMany(mappedBy = "exercicios")
-//    private List<Pessoa> pessoas;
 }

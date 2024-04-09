@@ -1,9 +1,9 @@
 package br.com.targettrust.springboot.aula.controller;
 
 import br.com.targettrust.springboot.aula.dto.AssociarExercicioRequest;
+import br.com.targettrust.springboot.aula.model.Cliente;
 import br.com.targettrust.springboot.aula.model.Exercicio;
-import br.com.targettrust.springboot.aula.model.Pessoa;
-import br.com.targettrust.springboot.aula.service.PessoaService;
+import br.com.targettrust.springboot.aula.service.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,84 +21,70 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/pessoas")
+@RequestMapping(path = "/clientes")
 @Slf4j
 @RequiredArgsConstructor // Cria um construtor com todos as propriedades final
-@Tag(name = "Pessoa Feature", description = "Operacoes relacionadas a uma pessoa no sistema (cliente pessoa fisica ou juridica)")
-public class PessoaController {
-//    private Logger logger = LoggerFactory.getLogger(PessoaController.class);
+@Tag(name = "Cliente Feature", description = "Operacoes relacionadas a uma Cliente no sistema (cliente pessoa fisica ou juridica)")
+public class ClienteController {
+    private final ClienteService clienteService;
 
-//    @Autowired // injeção por propriedade
-    private final PessoaService pessoaService;
-
-    // Injeção por construção é a recomendada por causa de testes unitários
-//    public PessoaController(PessoaService pessoaService) {
-//        this.pessoaService = pessoaService;
-//    }
-
-    // injecao por setter - ninguem usa
-//    @Autowired
-//    public void setPessoaService(PessoaService pessoaService) {
-//        this.pessoaService = pessoaService;
-//    }
-
-
-    // jackson para json transforma o json enviado em Pessoa, isso
-    // por causa do @RequestBody
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Criar uma Pessoa", description = "Cria uma registro de pessoa no sistema", tags = {"pessoa"},
+    @Operation(summary = "Criar uma Cliente", description = "Cria uma registro de Cliente no sistema", tags = {"Cliente"},
         responses = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "Pessoa criada com sucesso",
+                    description = "Cliente criada com sucesso",
                     content = @Content(
                             examples = @ExampleObject(
-                                    name = "pessoa",
-                                    description = "Pessoa registrada no banco",
+                                    name = "Cliente",
+                                    description = "Cliente registrada no banco",
                                     // todo verificar como passar um arquivo externo de exemplo
-                                    externalValue = "swagger-examples/pessoa.json"
+                                    externalValue = "swagger-examples/cliente.json"
                             )
                     )
 
             )
         }
     )
-    public Pessoa criarPessoa(@RequestBody Pessoa pessoa) {
-        return pessoaService.criarPessoa(pessoa);
+    public Cliente createCliente(@RequestBody Cliente cliente) {
+        return clienteService.createCliente(cliente);
     }
 
+    /**
+     * todo mais filtros
+     * @param nome
+     * @param idade
+     * @return
+     */
     @GetMapping
-    public List<Pessoa> listarPessoas(
+    public List<Cliente> listClientes(
             @RequestParam( name = "nome", required = false) String nome,
             @RequestParam(name = "idade", required = false) Integer idade
-//            @ FiltroRequest filtro
     ) {
 
-        return pessoaService.listarPessoas(nome);
+        return clienteService.listClientes(nome);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pessoa> findById(@PathVariable(name = "id") Integer id) {
-//        Pessoa pessoa = pessoaService.findById(id);
-//        return pessoa == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(pessoa);
-        return pessoaService.findById(id)
+    public ResponseEntity<Cliente> findById(@PathVariable(name = "id") Integer id) {
+        return clienteService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<Pessoa> editarPessoa(@PathVariable(name = "id") Integer id, @RequestBody Pessoa pessoa) {
+    public ResponseEntity<Cliente> editCliente(@PathVariable(name = "id") Integer id, @RequestBody Cliente cliente) {
 
-        return pessoaService.editarPessoa(id, pessoa)
+        return clienteService.editCliente(id, cliente)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Pessoa> editarPessoaParcial(@PathVariable(name = "id") Integer id, @RequestBody Pessoa pessoa) {
+    public ResponseEntity<Cliente> editClienteParcial(@PathVariable(name = "id") Integer id, @RequestBody Cliente cliente) {
 
-        return pessoaService.editarParcial(id, pessoa)
+        return clienteService.editarParcial(id, cliente)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -108,21 +93,21 @@ public class PessoaController {
 
 
     @DeleteMapping(path = "/{id}")
-    public void deletarPessoa(@PathVariable(name = "id") Integer id) {
-        pessoaService.deletarPessoa(id);
+    public void deleteCliente(@PathVariable(name = "id") Integer id) {
+        clienteService.deletarCliente(id);
     }
 
     @PostMapping(path = "/{id}/exercicios")
-    public void associarExercicios(
-            @PathVariable("id") Integer idPessoa,
+    public void associateExercicios(
+            @PathVariable("id") Integer idCliente,
             @RequestBody @Valid AssociarExercicioRequest associarExercicioRequest) {
 
-        log.info("Associar exercicio para pessoa de id " + idPessoa);
+        log.info("Associar exercicio para Cliente de id " + idCliente);
         log.info(associarExercicioRequest.getExercicios().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(",")));
         // todo implementar logica de associacao
-        // ir no banco localizar a pessoa
+        // ir no banco localizar a Cliente
         // localizar os ids dos exercicios
         // crio cada associação (nova tabela de associacao) uma para cada id passado
         // salva a associacao
@@ -131,7 +116,7 @@ public class PessoaController {
 
     @GetMapping(path = "/{id}/exercicios")
     public List<Exercicio> listarExercicios(
-            @PathVariable("id") Integer idPessoa) {
+            @PathVariable("id") Integer idCliente) {
 
         // todo implementar lista de exercicio
         return new ArrayList<>();

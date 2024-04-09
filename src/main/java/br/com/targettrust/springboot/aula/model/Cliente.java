@@ -18,10 +18,10 @@ import java.util.List;
 @EqualsAndHashCode(exclude = "enderecos")
 @ToString(exclude = "enderecos")
 @Entity
-@SequenceGenerator(name = "pessoa_seq", sequenceName = "pessoa_seq", allocationSize = 1)
-public class Pessoa {
+@SequenceGenerator(name = "cliente_seq", sequenceName = "cliente_seq", allocationSize = 1)
+public class Cliente {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pessoa_seq" )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cliente_seq" )
     private Long id;
     @Column(length = 50)
     private String nome;
@@ -31,11 +31,7 @@ public class Pessoa {
     private LocalDate dataNascimento;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    //@ManyToOne
-    //@OneToOne
-    //@ManyToMany
-    @JoinColumn(name = "pessoa_id", foreignKey = @ForeignKey(name = "fk_endereco_id"))
-    //@ManyToOne
+    @JoinColumn(name = "cliente_id", foreignKey = @ForeignKey(name = "fk_endereco_id"))
     private List<Endereco> enderecos;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
