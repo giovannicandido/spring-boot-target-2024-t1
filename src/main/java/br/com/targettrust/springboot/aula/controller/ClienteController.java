@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,7 +72,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponse> findById(@PathVariable(name = "id") Integer id) {
+    public ResponseEntity<ClienteResponse> findById(@PathVariable(name = "id") Long id) {
         return clienteService.findById(id)
                 .map(ClienteResponse::fromModel)
                 .map(ResponseEntity::ok)
@@ -79,7 +80,7 @@ public class ClienteController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<ClienteResponse> editCliente(@PathVariable(name = "id") Integer id, @RequestBody @Valid ClienteRequest cliente) {
+    public ResponseEntity<ClienteResponse> editCliente(@PathVariable(name = "id") Long id, @RequestBody @Valid ClienteRequest cliente) {
 
         return clienteService.editCliente(id, cliente.toModel())
                 .map(ClienteResponse::fromModel)
@@ -88,7 +89,7 @@ public class ClienteController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ClienteResponse> editClienteParcial(@PathVariable(name = "id") Integer id, @RequestBody @Valid ClienteRequest cliente) {
+    public ResponseEntity<ClienteResponse> editClienteParcial(@PathVariable(name = "id") Long id, @RequestBody @Valid ClienteRequest cliente) {
 
         return clienteService.editarParcial(id, cliente.toModel())
                 .map(ClienteResponse::fromModel)
@@ -100,13 +101,13 @@ public class ClienteController {
 
 
     @DeleteMapping(path = "/{id}")
-    public void deleteCliente(@PathVariable(name = "id") Integer id) {
+    public void deleteCliente(@PathVariable(name = "id") Long id) {
         clienteService.deletarCliente(id);
     }
 
     @PostMapping(path = "/{id}/exercicios")
     public void associateExercicios(
-            @PathVariable("id") Integer idCliente,
+            @PathVariable("id") Long idCliente,
             @RequestBody @Valid AssociarExercicioRequest associarExercicioRequest) {
 
         log.info("Associar exercicio para Cliente de id " + idCliente);
@@ -123,7 +124,7 @@ public class ClienteController {
 
     @GetMapping(path = "/{id}/exercicios")
     public List<Exercicio> listarExercicios(
-            @PathVariable("id") Integer idCliente) {
+            @PathVariable("id") Long idCliente) {
 
         // todo implementar lista de exercicio
         return new ArrayList<>();

@@ -3,6 +3,7 @@ package br.com.targettrust.springboot.aula;
 import br.com.targettrust.springboot.aula.dto.response.ErrorResponse;
 import br.com.targettrust.springboot.aula.dto.response.ValidationErrorResponse;
 import br.com.targettrust.springboot.aula.dto.response.ValidationErrorsResponse;
+import br.com.targettrust.springboot.aula.model.exceptions.ClientePossuiEnderecosException;
 import br.com.targettrust.springboot.aula.model.exceptions.RegistryNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -38,7 +39,13 @@ public class AppControllerAdvice extends ResponseEntityExceptionHandler {
         return new ErrorResponse("Ocorreu um erro");
     }
 
-    @Override
+    @ExceptionHandler(ClientePossuiEnderecosException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleException(ClientePossuiEnderecosException exception) {
+        return new ErrorResponse("O cliente %s possui enderecos e não pode ser removido".formatted(exception.getClientId()));
+    }
+
+   /* @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         var problemDetails =  ProblemDetail.forStatus(HttpStatus.BAD_REQUEST.value());
         problemDetails.setType(URI.create("/problem-details/validation-error"));
@@ -48,7 +55,7 @@ public class AppControllerAdvice extends ResponseEntityExceptionHandler {
                 problemDetails
         );
     }
-
+*/
     private static Map<String, Object> extractValidationErrors(MethodArgumentNotValidException ex) {
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         Set<ValidationErrorsResponse> errors = new HashSet<>();

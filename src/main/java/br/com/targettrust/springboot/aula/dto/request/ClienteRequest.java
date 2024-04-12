@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -42,7 +44,7 @@ public class ClienteRequest {
                 .enderecos(
                         enderecos.stream()
                                 .map(EnderecoRequest::toModel)
-                                .toList()
+                                .collect(Collectors.toList())
                 )
                 .build();
     }

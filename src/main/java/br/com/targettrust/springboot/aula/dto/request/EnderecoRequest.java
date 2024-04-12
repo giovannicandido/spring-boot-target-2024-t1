@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EnderecoRequest {
+
+    private Long id;
+
     @NotBlank
     private String rua;
 
@@ -22,7 +25,7 @@ public class EnderecoRequest {
     private Integer numero;
 
     public Endereco toModel() {
-        return new Endereco(null, rua, numero, null);
+        return new Endereco(id, rua, numero, null);
     }
 
 }
