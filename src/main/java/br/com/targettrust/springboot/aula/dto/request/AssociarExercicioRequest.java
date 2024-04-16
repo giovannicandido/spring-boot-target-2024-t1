@@ -1,15 +1,21 @@
 package br.com.targettrust.springboot.aula.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 
 @Value
+@Builder
+@Jacksonized
 public class AssociarExercicioRequest {
 
     @NotNull
     @Size(min = 1)
-    private List<Integer> exercicios;
+    private List<Long> exercicios;
 }

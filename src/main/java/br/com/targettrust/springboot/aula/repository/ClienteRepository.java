@@ -84,7 +84,7 @@ public class ClienteRepository {
         if(cliente != null) {
             cliente.getEnderecos().forEach(entityManager::remove);
         }
-        Long numeroEnderecos = (Long) entityManager.createQuery("select count(e) from Endereco e where e.cliente.id = :clienteId")
+        Long numeroEnderecos = (Long) entityManager.createQuery("select count(e) from Cliente c join c.enderecos e where c.id = :clienteId")
                 .setParameter("clienteId", id)
                 .getSingleResult();
         if(numeroEnderecos != null && numeroEnderecos > 0) {

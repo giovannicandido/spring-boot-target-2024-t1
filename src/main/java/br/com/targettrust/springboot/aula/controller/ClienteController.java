@@ -5,6 +5,7 @@ import br.com.targettrust.springboot.aula.dto.request.ClienteRequest;
 import br.com.targettrust.springboot.aula.dto.response.ClienteResponse;
 import br.com.targettrust.springboot.aula.model.Exercicio;
 import br.com.targettrust.springboot.aula.service.ClienteService;
+import br.com.targettrust.springboot.aula.service.ExercicioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 @Tag(name = "Cliente Feature", description = "Operacoes relacionadas a uma Cliente no sistema (cliente pessoa fisica ou juridica)")
 public class ClienteController {
     private final ClienteService clienteService;
+    private final ExercicioService exercicioService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -114,20 +116,14 @@ public class ClienteController {
         log.info(associarExercicioRequest.getExercicios().stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(",")));
-        // todo implementar logica de associacao
-        // ir no banco localizar a Cliente
-        // localizar os ids dos exercicios
-        // crio cada associação (nova tabela de associacao) uma para cada id passado
-        // salva a associacao
-        // retorna ok
+        exercicioService.associarExercicios(idCliente, associarExercicioRequest.getExercicios());
     }
 
     @GetMapping(path = "/{id}/exercicios")
     public List<Exercicio> listarExercicios(
             @PathVariable("id") Long idCliente) {
 
-        // todo implementar lista de exercicio
-        return new ArrayList<>();
+        return exercicioService.findAllExerciciosByClienteId(idCliente);
     }
 
 

@@ -1,11 +1,11 @@
 package br.com.targettrust.springboot.aula.model;
 
+import ch.qos.logback.core.net.server.Client;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Value;
+import lombok.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +13,9 @@ import java.util.UUID;
 @Setter
 @Entity
 @SequenceGenerator(name = "exercicio_seq", sequenceName = "exercicio_seq", allocationSize = 1)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Exercicio {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercicio_seq")

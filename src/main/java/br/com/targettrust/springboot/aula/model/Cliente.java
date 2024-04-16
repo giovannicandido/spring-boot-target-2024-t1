@@ -35,6 +35,6 @@ public class Cliente {
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "cliente")
     private List<Endereco> enderecos;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany
     private List<Exercicio> exercicios;
 }
