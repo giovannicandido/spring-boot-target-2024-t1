@@ -25,4 +25,14 @@ public class Exercicio {
     @Column(nullable = false, length = 150)
     private String parteCorpo;
 
+    @ManyToMany(mappedBy = "exercicios", fetch = FetchType.LAZY)
+    private List<Cliente> cliente;
+
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "dia_exercicio_id", foreignKey = @ForeignKey(name = "fk_exercicio_dia"))
+    private DiaExercio diaExercio;
+
+    @OneToMany(mappedBy = "exercicio")
+    private List<ClienteExercicio> clienteExercicio;
+
 }

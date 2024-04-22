@@ -50,7 +50,7 @@ public class ExercicioService {
         }
 
         // crio cada associação (nova tabela de associacao) uma para cada id passado
-        cliente.setExercicios(exercicios);
+//        cliente.setExercicios(exercicios);
 //        clientRepository.save()
         // salva a associacao
         clienteRepository.update(cliente, idCliente);

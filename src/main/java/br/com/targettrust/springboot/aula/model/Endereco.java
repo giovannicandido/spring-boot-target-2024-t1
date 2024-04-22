@@ -19,7 +19,7 @@ public class Endereco {
     private String rua;
     private Integer numero;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "cliente_id", foreignKey = @ForeignKey(name = "fk_endereco_id"))
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "cliente_id", foreignKey = @ForeignKey(name = "fk_endereco_id"), nullable = false)
     private Cliente cliente;
 }

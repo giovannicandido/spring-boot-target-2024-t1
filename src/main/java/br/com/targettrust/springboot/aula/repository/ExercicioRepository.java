@@ -27,9 +27,9 @@ public interface ExercicioRepository extends JpaRepository<Exercicio, Long> {
 
     void deleteByNomeAndParteCorpo(String nome, String parteCorpo);
 // confirmar como fazer update pelo nome
-    @Query("update Exercicio e set e.parteCorpo = :parteCorpo ")
-    @Modifying
-    void updateByNome(String nome, @Param("parteCorpo") String parteCorpo);
+//    @Query("update Exercicio e set e.parteCorpo = :parteCorpo ")
+//    @Modifying
+//    void updateByNome(String nome, @Param("parteCorpo") String parteCorpo);
 
     Page<Exercicio> findExercicioByNome(String nome, Pageable unpaged);
 
