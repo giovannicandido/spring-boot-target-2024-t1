@@ -1,12 +1,17 @@
 package br.com.targettrust.springboot.aula.service;
 
 import br.com.targettrust.springboot.aula.model.Cliente;
+import br.com.targettrust.springboot.aula.model.Endereco;
 import br.com.targettrust.springboot.aula.model.Exercicio;
+import br.com.targettrust.springboot.aula.model.exceptions.ExercicioIdsNotFoundException;
 import br.com.targettrust.springboot.aula.model.exceptions.RegistryNotFoundException;
 import br.com.targettrust.springboot.aula.repository.ExercicioRepository;
 import br.com.targettrust.springboot.aula.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +19,21 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final ExercicioRepository exercicioRepository;
+    private final ExercicioService exercicioService;
 
+    @Transactional(readOnly = true)
     public List<Cliente> listClientes(String nome) {
 //        exercicioRepository.deleteA
-        return clienteRepository.findAll();
+        var clientes =  clienteRepository.findAll();
+        for (Cliente cliente : clientes) {
+            List<Endereco> enderecos = cliente.getEnderecos();
+            enderecos.forEach(endereco -> log.info(endereco.toString()));
+        }
+        return clientes;
 
     }
 
@@ -31,10 +44,14 @@ public class ClienteService {
     //        5. Inputs
     //        5. Results
 
-
-//    @Transactional
+    @Transactional(noRollbackFor = ExercicioIdsNotFoundException.class, transactionManager = "customTransaction")
     public Cliente createCliente(Cliente cliente) {
-        return clienteRepository.create(cliente);
+        var clienteSaved = clienteRepository.create(cliente);
+        exercicioService.associarExercicios(200L, List.of(3L));
+        // ...
+//        clienteRepository.create(new Cliente());
+        throw new IllegalArgumentException("teste");
+//        return clienteSaved;
     }
 
     public Optional<Cliente> findById(Long id) {

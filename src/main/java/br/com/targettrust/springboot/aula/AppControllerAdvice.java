@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 @Slf4j
 public class AppControllerAdvice extends ResponseEntityExceptionHandler {
 

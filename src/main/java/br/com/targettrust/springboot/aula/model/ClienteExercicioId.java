@@ -1,9 +1,13 @@
 package br.com.targettrust.springboot.aula.model;
 
 import jakarta.persistence.Embeddable;
+import lombok.Data;
+
+import java.io.Serializable;
 
 @Embeddable
-public class ClienteExercicioId {
+@Data
+public class ClienteExercicioId implements Serializable {
     private Long clienteId;
     private Long exercicioId;
 }

@@ -29,7 +29,7 @@ public class ClienteRepository {
     }
 
 
-    @Transactional
+    @Transactional()
     public Cliente update(Cliente cliente, Long id) {
         Cliente clienteNoBanco = entityManager.find(Cliente.class, id);
         List<Endereco> enderecosNovos = new ArrayList<>();

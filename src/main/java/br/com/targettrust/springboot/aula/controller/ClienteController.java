@@ -3,6 +3,8 @@ package br.com.targettrust.springboot.aula.controller;
 import br.com.targettrust.springboot.aula.dto.request.AssociarExercicioRequest;
 import br.com.targettrust.springboot.aula.dto.request.ClienteRequest;
 import br.com.targettrust.springboot.aula.dto.response.ClienteResponse;
+import br.com.targettrust.springboot.aula.model.Cliente;
+import br.com.targettrust.springboot.aula.model.Endereco;
 import br.com.targettrust.springboot.aula.model.Exercicio;
 import br.com.targettrust.springboot.aula.service.ClienteService;
 import br.com.targettrust.springboot.aula.service.ExercicioService;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -124,6 +127,18 @@ public class ClienteController {
             @PathVariable("id") Long idCliente) {
 
         return exercicioService.findAllExerciciosByClienteId(idCliente);
+    }
+
+    @GetMapping(path = "/get-client-open-session")
+//    @Transactional(readOnly = true)
+    public List<Cliente> getClientOpenSession() {
+        var clientes = clienteService.listClientes("ignorado");
+        clientes.forEach(cliente -> {
+                    List<Endereco> endereco = cliente.getEnderecos();
+                    endereco.forEach(e -> log.info(e.toString()));
+                }
+                );
+        return clientes;
     }
 
 

@@ -32,20 +32,10 @@ public class Cliente {
     @Column(nullable = false)
     private LocalDate dataNascimento;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "cliente", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "cliente", fetch = FetchType.LAZY)
     private List<Endereco> enderecos;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "cliente_exercicio_personal",
-//            joinColumns = {
-//                    @JoinColumn(name = "cliente_id", foreignKey = @ForeignKey(name = "fk_cliente_exercicio_personal_cliente_id"))
-//            },
-//            inverseJoinColumns = {@JoinColumn(name = "exercicio_id")
-//
-//            }
-//    )
-//    private List<Exercicio> exercicios;
-    @OneToMany(mappedBy = "cliente")
-    private List<ClienteExercicio> clienteExercicio;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Exercicio> exercicios;
+
 }
