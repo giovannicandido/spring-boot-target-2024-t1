@@ -21,6 +21,10 @@ public class Endereco {
     private Long id;
     private String rua;
     private Integer numero;
+    private String bairro;
+
+    @Column(length = 3)
+    private String countryCode;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", foreignKey = @ForeignKey(name = "fk_endereco_id"), nullable = false)

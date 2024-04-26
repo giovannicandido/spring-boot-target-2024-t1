@@ -1,11 +1,13 @@
 package br.com.targettrust.springboot.aula.model;
 
+import br.com.targettrust.springboot.aula.model.exceptions.IllegalCountryCodeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,9 +37,6 @@ public class Cliente {
     @Column(nullable = false)
     private LocalDate dataNascimento;
 
-    @Column(length = 3)
-    private String countryCode;
-
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "cliente", fetch = FetchType.LAZY)
     private List<Endereco> enderecos;
 
@@ -45,11 +44,27 @@ public class Cliente {
     private List<Exercicio> exercicios;
 
     public boolean isLegalAge(CountryCode country) {
-        return getIdadeCliente() >= LegalAgeCountries.legalAges.get(country.getCode());
+
+        var age = LegalAgeCountries.legalAges.get(country.getCode());
+        if(age == null) {
+            throw new IllegalCountryCodeException(country.getCode());
+        }
+
+        return getIdadeCliente() >= age;
     }
 
     public Long getIdadeCliente() {
         return ChronoUnit.YEARS.between(dataNascimento, LocalDate.now());
+    }
+
+    public boolean clienteLivesIn(List<String> bairro) {
+        return false;
+    }
+
+    public List<String> getBairrosCliente() {
+        return enderecos == null ? new ArrayList<>() : enderecos.stream()
+                .map(Endereco::getBairro)
+                .toList();
     }
 
 }

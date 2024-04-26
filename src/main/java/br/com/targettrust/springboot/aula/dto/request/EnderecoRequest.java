@@ -25,7 +25,7 @@ public class EnderecoRequest {
     private Integer numero;
 
     public Endereco toModel() {
-        return new Endereco(id, rua, numero, null);
+        return new Endereco(id, rua, numero, "bairro", "br", null);
     }
 
 }
