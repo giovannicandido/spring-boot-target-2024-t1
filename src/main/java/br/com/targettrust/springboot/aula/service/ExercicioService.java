@@ -7,6 +7,7 @@ import br.com.targettrust.springboot.aula.repository.ClienteRepository;
 import br.com.targettrust.springboot.aula.repository.ExercicioRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -42,15 +43,16 @@ public class ExercicioService {
             exercicioSaved.set(exer);
             if(exer.getNome().equals("Nome Updated")) {
                 status.setRollbackOnly();
+                transactionManager.rollback(status);
+                return status;
             }
 
             transactionManager.commit(status);
-            transactionManager.rollback(status);
 
             return status;
         });
 
-        return exercicioRepository.save(exercicioSaved.get());
+        return exercicioSaved.get();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

@@ -57,10 +57,6 @@ public class Cliente {
         return ChronoUnit.YEARS.between(dataNascimento, LocalDate.now());
     }
 
-    public boolean clienteLivesIn(List<String> bairro) {
-        return false;
-    }
-
     public List<String> getBairrosCliente() {
         return enderecos == null ? new ArrayList<>() : enderecos.stream()
                 .map(Endereco::getBairro)
