@@ -1,13 +1,7 @@
 package br.com.targettrust.springboot.aula.model;
 
-import ch.qos.logback.core.net.server.Client;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,6 +10,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Exercicio {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercicio_seq")
@@ -27,7 +22,6 @@ public class Exercicio {
 
     @ManyToOne
     @JoinColumn(nullable = true, name = "dia_exercicio_id", foreignKey = @ForeignKey(name = "fk_exercicio_dia"))
-    private DiaExercio diaExercio;
-
+    private DiaExercio diaExercicio;
 
 }

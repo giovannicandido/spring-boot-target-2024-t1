@@ -36,23 +36,11 @@ public class ExercicioService {
 //        transactionTemplate = new TransactionTemplate(transactionManager);
 //    }
 
+    @Transactional
     public Exercicio createExercicio(Exercicio exercicio) {
-        final AtomicReference<Exercicio> exercicioSaved = new AtomicReference<>();
-        transactionTemplate.execute((TransactionStatus status) -> {
-            var exer = exercicioRepository.save(exercicio);
-            exercicioSaved.set(exer);
-            if(exer.getNome().equals("Nome Updated")) {
-                status.setRollbackOnly();
-                transactionManager.rollback(status);
-                return status;
-            }
-
-            transactionManager.commit(status);
-
-            return status;
-        });
-
-        return exercicioSaved.get();
+        return exercicioRepository.save(exercicio);
+//        exercicio.setId(99L);
+//        return exercicio;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
