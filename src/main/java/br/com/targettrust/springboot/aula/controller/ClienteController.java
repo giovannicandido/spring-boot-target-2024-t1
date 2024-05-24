@@ -55,7 +55,7 @@ public class ClienteController {
         }
     )
     public ClienteResponse createCliente(@RequestBody @Valid ClienteRequest cliente) {
-        return ClienteResponse.fromModel(clienteService.createCliente(cliente.toModel()));
+        return ClienteResponse.fromModel(clienteService.createCliente(cliente.toModel(), cliente.getCep()));
     }
 
     /**

@@ -22,6 +22,7 @@ public class Endereco {
     private String rua;
     private Integer numero;
     private String bairro;
+    private String estado;
 
     @Column(length = 3)
     private String countryCode;

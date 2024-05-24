@@ -19,13 +19,14 @@ public class EnderecoRequest {
 
     @NotBlank
     private String rua;
+    private String estado;
 
     @NotNull
     @Min(1)
     private Integer numero;
 
     public Endereco toModel() {
-        return new Endereco(id, rua, numero, "bairro", "br", null);
+        return new Endereco(id, rua, numero, "bairro", "br", estado, null);
     }
 
 }

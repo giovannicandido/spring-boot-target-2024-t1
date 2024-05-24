@@ -68,9 +68,9 @@ class ClienteTest {
     public void given_bairroIsInAddress_when_getBairros_should_returnBairros() {
 
         var enderecos = List.of(
-                new Endereco(1L, "rua", 100, "Jardims", "br", cliente),
-                new Endereco(2L, "rua", 100, "Iguatemi", "br", cliente),
-                new Endereco(2L, "rua", 100, "Santo Antonio", "br", cliente)
+                new Endereco(1L, "rua", 100, "Jardims", "br", "SP", cliente),
+                new Endereco(2L, "rua", 100, "Iguatemi", "br", "SP", cliente),
+                new Endereco(2L, "rua", 100, "Santo Antonio", "br", "SP", cliente)
         );
 
         cliente.setEnderecos(enderecos);

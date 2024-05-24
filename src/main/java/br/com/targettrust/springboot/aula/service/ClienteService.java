@@ -24,6 +24,7 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final ExercicioRepository exercicioRepository;
     private final ExercicioService exercicioService;
+    private final CepService cepService;
 
     @Transactional(readOnly = true)
     public List<Cliente> listClientes(String nome) {
@@ -44,14 +45,15 @@ public class ClienteService {
     //        5. Inputs
     //        5. Results
 
-    @Transactional(noRollbackFor = ExercicioIdsNotFoundException.class, transactionManager = "customTransaction")
-    public Cliente createCliente(Cliente cliente) {
+    @Transactional(noRollbackFor = ExercicioIdsNotFoundException.class)
+    public Cliente createCliente(Cliente cliente, String cep) {
+        Endereco endereco = cepService.searchAddress(cep);
+        if(endereco != null) {
+            cliente.getEnderecos().add(endereco);
+        }
         var clienteSaved = clienteRepository.create(cliente);
-        exercicioService.associarExercicios(200L, List.of(3L));
-        // ...
-//        clienteRepository.create(new Cliente());
-        throw new IllegalArgumentException("teste");
-//        return clienteSaved;
+//        exercicioService.associarExercicios(200L, List.of(3L));
+        return clienteSaved;
     }
 
     public Optional<Cliente> findById(Long id) {

@@ -31,10 +31,12 @@ public class ClienteRequest {
     @NotNull
     private LocalDate dataNascimento;
 
-    @Size(min = 1)
+    @Size(min = 0)
     @NotNull
     @Valid
     private List<EnderecoRequest> enderecos;
+
+    private String cep;
 
     public Cliente toModel() {
         return Cliente.builder()
