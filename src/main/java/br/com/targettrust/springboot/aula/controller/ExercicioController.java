@@ -2,6 +2,7 @@ package br.com.targettrust.springboot.aula.controller;
 
 import br.com.targettrust.springboot.aula.dto.request.ExercicioRequest;
 import br.com.targettrust.springboot.aula.dto.response.ExercicioResponse;
+import br.com.targettrust.springboot.aula.model.exceptions.RegistryNotFoundException;
 import br.com.targettrust.springboot.aula.service.ExercicioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,10 @@ public class ExercicioController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ExercicioResponse createExercicio(@RequestBody @Valid ExercicioRequest exercicioRequest,
-                                             Pageable page) {
-        return ExercicioResponse.fromModel(
-               exercicioService.createExercicio(exercicioRequest.toModel())
-        );
+             Pageable page) {
+        throw new RegistryNotFoundException(22L);
+//        return ExercicioResponse.fromModel(
+//               exercicioService.createExercicio(exercicioRequest.toModel())
+//        );
     }
 }
