@@ -5,7 +5,6 @@ import br.com.targettrust.springboot.aula.dto.request.ClienteRequest;
 import br.com.targettrust.springboot.aula.model.Cliente;
 import br.com.targettrust.springboot.aula.model.Endereco;
 import br.com.targettrust.springboot.aula.service.CepService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.EntityManager;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

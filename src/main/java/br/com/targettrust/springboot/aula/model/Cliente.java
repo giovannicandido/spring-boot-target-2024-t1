@@ -1,7 +1,6 @@
 package br.com.targettrust.springboot.aula.model;
 
 import br.com.targettrust.springboot.aula.model.exceptions.IllegalCountryCodeException;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +8,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 //@Getter
 //@Setter

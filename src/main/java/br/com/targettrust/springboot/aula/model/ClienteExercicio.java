@@ -1,6 +1,9 @@
 package br.com.targettrust.springboot.aula.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,7 +1,8 @@
 package br.com.targettrust.springboot.aula.dto.response;
 
 import br.com.targettrust.springboot.aula.model.Cliente;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;

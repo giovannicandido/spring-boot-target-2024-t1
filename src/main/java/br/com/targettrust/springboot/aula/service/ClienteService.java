@@ -2,18 +2,14 @@ package br.com.targettrust.springboot.aula.service;
 
 import br.com.targettrust.springboot.aula.model.Cliente;
 import br.com.targettrust.springboot.aula.model.Endereco;
-import br.com.targettrust.springboot.aula.model.Exercicio;
 import br.com.targettrust.springboot.aula.model.exceptions.ExercicioIdsNotFoundException;
-import br.com.targettrust.springboot.aula.model.exceptions.RegistryNotFoundException;
-import br.com.targettrust.springboot.aula.repository.ExercicioRepository;
 import br.com.targettrust.springboot.aula.repository.ClienteRepository;
+import br.com.targettrust.springboot.aula.repository.ExercicioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
