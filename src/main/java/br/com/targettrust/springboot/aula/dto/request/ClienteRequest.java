@@ -1,5 +1,6 @@
 package br.com.targettrust.springboot.aula.dto.request;
 
+import br.com.targettrust.springboot.aula.dto.validations.AgeValidation;
 import br.com.targettrust.springboot.aula.model.Cliente;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+//@PasswordValidation
 public class ClienteRequest {
 
     @NotBlank
@@ -27,7 +29,13 @@ public class ClienteRequest {
     @CPF
     private String cpf;
 
+//    @PassWordValidationItem
+    private String password;
+//    @PassWordValidationItem
+    private String confirmPassword;
+
     @NotNull
+    @AgeValidation(legalAge = 21)
     private LocalDate dataNascimento;
 
     @Size(min = 0)

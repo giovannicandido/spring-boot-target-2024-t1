@@ -20,8 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping(path = "/clientes")
@@ -35,21 +38,21 @@ public class ClienteController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Criar uma Cliente", description = "Cria uma registro de Cliente no sistema", tags = {"Cliente"},
-        responses = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Cliente criada com sucesso",
-                    content = @Content(
-                            examples = @ExampleObject(
-                                    name = "Cliente",
-                                    description = "Cliente registrada no banco",
-                                    // todo verificar como passar um arquivo externo de exemplo
-                                    externalValue = "swagger-examples/cliente.json"
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Cliente criada com sucesso",
+                            content = @Content(
+                                    examples = @ExampleObject(
+                                            name = "Cliente",
+                                            description = "Cliente registrada no banco",
+                                            // todo verificar como passar um arquivo externo de exemplo
+                                            externalValue = "swagger-examples/cliente.json"
+                                    )
                             )
-                    )
 
-            )
-        }
+                    )
+            }
     )
     public ClienteResponse createCliente(@RequestBody @Valid ClienteRequest cliente) {
         return ClienteResponse.fromModel(clienteService.createCliente(cliente.toModel(), cliente.getCep()));
@@ -57,20 +60,63 @@ public class ClienteController {
 
     /**
      * todo mais filtros
+     *
      * @param nome
      * @param idade
      * @return
      */
     @GetMapping
     public List<ClienteResponse> listClientes(
-            @RequestParam( name = "nome", required = false) String nome,
+            @RequestParam(name = "nome", required = false) String nome,
             @RequestParam(name = "idade", required = false) Integer idade
     ) {
 
-        return clienteService.listClientes(nome)
-                .stream()
+        Map<Long, ClienteResponse> somaIdades = clienteService.listClientes(nome)
+                .stream() // pode ser infinito RxJava
+                .parallel()
                 .map(ClienteResponse::fromModel)
-                .toList();
+                .filter(this.testFilter(false, true))
+                .filter(clienteResponse -> clienteResponse.getCpf().startsWith("0"))
+//                .map(client -> client.getNome())
+                .skip(5)
+//                .map(ClienteResponse::getIdade)
+//                .reduce(Long::sum);
+                .collect(Collectors.toMap(ClienteResponse::getIdade, Function.identity()));
+        // Faixas Etarias
+        List<ClienteResponse> de2A10Anos = new ArrayList<>();
+        List<ClienteResponse> finalDe2A10Anos = de2A10Anos;
+
+        List<ClienteResponse> de18A32Anos = new ArrayList<>();
+        List<ClienteResponse> finalDe18A32Anos = de18A32Anos;
+
+        IntStream.range(2, 11)
+                .forEach(idadeRange -> {
+                    finalDe2A10Anos.add(somaIdades.get(idadeRange));
+                });
+
+        de2A10Anos = de2A10Anos.stream().filter(Objects::isNull).collect(Collectors.toList());
+
+        IntStream.range(18, 32)
+                .forEach(idadeRange -> {
+                    finalDe18A32Anos.add(somaIdades.get(idadeRange));
+                });
+        // pacote -> versao -> politicas -> opcoes -> metodos de calculo -> valores
+        //                                         -> resultados
+        // parallel stream
+        // Collectors
+        // flatMap e Map
+        // reduce
+
+        return new ArrayList<>();
+    }
+
+    private Predicate<ClienteResponse> testFilter(boolean filterByName, boolean filterByCpf) {
+        if (filterByName) {
+            return (cliente) -> cliente.getNome().startsWith(cliente.getNome());
+        } else if (filterByCpf) {
+            return (cliente) -> cliente.getCpf().equalsIgnoreCase(cliente.getCpf());
+        }
+        return null;
     }
 
     @GetMapping("/{id}")
@@ -98,8 +144,6 @@ public class ClienteController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-
 
 
     @DeleteMapping(path = "/{id}")
@@ -134,7 +178,7 @@ public class ClienteController {
                     List<Endereco> endereco = cliente.getEnderecos();
                     endereco.forEach(e -> log.info(e.toString()));
                 }
-                );
+        );
         return clientes;
     }
 

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Builder
@@ -15,6 +16,10 @@ public class ClienteResponse {
     private String cpf;
     private LocalDate dataNascimento;
     private List<EnderecoResponse> enderecos;
+
+    public Long getIdade() {
+        return ChronoUnit.YEARS.between(dataNascimento, LocalDate.now());
+    }
 
     public static ClienteResponse fromModel(Cliente cliente) {
         return ClienteResponse.builder()
