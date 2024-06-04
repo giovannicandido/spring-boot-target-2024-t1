@@ -5,6 +5,8 @@ import br.com.targettrust.springboot.aula.dto.request.ClienteRequest;
 import br.com.targettrust.springboot.aula.model.Cliente;
 import br.com.targettrust.springboot.aula.model.Endereco;
 import br.com.targettrust.springboot.aula.service.CepService;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.WithJwt;
+import com.c4_soft.springaddons.security.oauth2.test.webmvc.AddonsWebmvcTestConf;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.EntityManager;
@@ -12,6 +14,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AulaIntegTest
+@Import(AddonsWebmvcTestConf.class)
 class ClienteControllerIntegTest {
 
     @Autowired
@@ -47,16 +51,17 @@ class ClienteControllerIntegTest {
 
     @Test
     @Transactional(readOnly = false)
+    @WithJwt("admin-user.json")
     void given_validCep_when_createCliente_then_shouldSaveClientWithAddress() throws Exception {
 
         when(cepService.searchAddress(any()))
                 .thenReturn(new Endereco(null,  "Praça da Sé", null, "Sé", "SP", "BR", null));
 
-        var clienteRequest = new ClienteRequest("joao", "743.842.560-60",
-                LocalDate.now().minus(22, ChronoUnit.YEARS),
-                new ArrayList<>(),
-                "9999939430"
-        );
+        var clienteRequest = ClienteRequest.builder()
+                .nome("joao")
+                .cep("743.842.560-60")
+                .enderecos(new ArrayList<>())
+                .build();
 
         var json = objectMapper.writeValueAsString(clienteRequest);
 

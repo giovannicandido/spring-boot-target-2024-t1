@@ -8,6 +8,7 @@ import br.com.targettrust.springboot.aula.model.Endereco;
 import br.com.targettrust.springboot.aula.model.Exercicio;
 import br.com.targettrust.springboot.aula.service.ClienteService;
 import br.com.targettrust.springboot.aula.service.ExercicioService;
+import com.c4_soft.springaddons.security.oidc.OpenidClaimSet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -18,8 +19,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -54,8 +59,11 @@ public class ClienteController {
                     )
             }
     )
-    public ClienteResponse createCliente(@RequestBody @Valid ClienteRequest cliente) {
-        return ClienteResponse.fromModel(clienteService.createCliente(cliente.toModel(), cliente.getCep()));
+    @PreAuthorize("hasRole('MANAGER')")
+    public ClienteResponse createCliente(@RequestBody @Valid ClienteRequest cliente, @AuthenticationPrincipal OpenidClaimSet token) {
+        log.info(token.getEmail());
+        return new ClienteResponse(1L,"nome", "", LocalDate.now(), null);
+//        return ClienteResponse.fromModel(clienteService.createCliente(cliente.toModel(), cliente.getCep()));
     }
 
     /**

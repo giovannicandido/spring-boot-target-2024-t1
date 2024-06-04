@@ -9,6 +9,7 @@ import br.com.targettrust.springboot.aula.model.exceptions.ExercicioIdsNotFoundE
 import br.com.targettrust.springboot.aula.model.exceptions.RegistryNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -77,6 +78,13 @@ public class AppControllerAdvice extends ResponseEntityExceptionHandler {
         problemDetails.setProperties(properties);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 problemDetails
+        );
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleException(AccessDeniedException exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                new ErrorResponse("Acesso não autorizado")
         );
     }
 

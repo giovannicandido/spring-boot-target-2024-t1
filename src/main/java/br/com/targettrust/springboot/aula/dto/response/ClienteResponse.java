@@ -1,14 +1,18 @@
 package br.com.targettrust.springboot.aula.dto.response;
 
 import br.com.targettrust.springboot.aula.model.Cliente;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class ClienteResponse {
     private Long id;
